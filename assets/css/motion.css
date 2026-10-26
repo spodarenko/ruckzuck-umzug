@@ -1,0 +1,171 @@
+/* Motion layer. Patterns inspired by cardfly.framer.website, re-implemented:
+   reveal on scroll (up / label / scale / left / right / tilt / fade), split headline,
+   word-by-word statement, rotating ring, hero zoom, counters, timeline fill.
+   Only active with JS (html.js) and without prefers-reduced-motion. */
+
+@media (prefers-reduced-motion: no-preference) {
+	.js [data-reveal] {
+		opacity: 0;
+		transition:
+			opacity var(--dur-reveal) var(--ease-out) var(--d, 0s),
+			transform var(--dur-reveal) var(--ease-out) var(--d, 0s);
+		will-change: transform, opacity;
+	}
+
+	.js [data-reveal='up'] {
+		transform: translateY(80px);
+	}
+
+	.js [data-reveal='label'] {
+		transform: translateY(50px);
+	}
+
+	.js [data-reveal='scale'] {
+		transform: scale(0.8);
+	}
+
+	.js [data-reveal='left'] {
+		transform: translateX(-66px);
+	}
+
+	.js [data-reveal='right'] {
+		transform: translateX(66px);
+	}
+
+	.js [data-reveal='tilt'] {
+		transform: perspective(1200px) translateY(80px) rotateX(12deg);
+		transform-origin: 50% 100%;
+	}
+
+	.js [data-reveal].is-in {
+		opacity: 1;
+		transform: none;
+	}
+
+	/* Split headline: each word slides up from a mask. */
+	.js [data-split] .w {
+		display: inline-block;
+		overflow: hidden;
+		vertical-align: top;
+		padding-bottom: 0.06em;
+	}
+
+	.js [data-split] .w > span {
+		display: inline-block;
+		transform: translateY(105%);
+		transition: transform 1s var(--ease-out) calc(var(--i) * 0.08s + 0.1s);
+	}
+
+	.js [data-split].is-in .w > span {
+		transform: none;
+	}
+
+	/* Statement: words light up as you scroll through. */
+	.js [data-words] .word {
+		opacity: 0.18;
+		transition: opacity 0.3s linear;
+	}
+
+	.js [data-words] .word.on {
+		opacity: 1;
+	}
+
+	/* Hero photo: zoom-out on load, parallax driven by JS (--zoom-y). */
+	.js [data-zoom] {
+		transform: translateY(var(--zoom-y, 0)) scale(var(--zoom-s, 1.12));
+		transition: transform 1.6s var(--ease-out);
+	}
+
+	.js .is-loaded [data-zoom] {
+		--zoom-s: 1;
+	}
+
+	.js .is-settled [data-zoom] {
+		transition: none;
+	}
+
+	.js [data-parallax] {
+		transform: translateY(var(--py, 0));
+	}
+
+	.ring > svg {
+		transform: rotate(var(--ring-rot, 0deg));
+	}
+
+	.js [data-drift] {
+		transform: translateX(var(--drift, 0));
+	}
+
+	/* Micro-interactions */
+	.btn:not(:disabled):hover {
+		transform: translateY(-2px);
+	}
+
+	.btn:not(:disabled):hover svg:last-child {
+		transform: translateX(3px);
+	}
+
+	.btn svg,
+	.link-arrow svg {
+		transition: transform var(--dur-ui) var(--ease-out);
+	}
+
+	.link-arrow:hover svg {
+		transform: translateX(4px);
+	}
+
+	.service__media img,
+	.timeline__item img,
+	.about__img,
+	.facts__img {
+		transition:
+			transform var(--dur-reveal) var(--ease-out),
+			opacity var(--dur-reveal) var(--ease-out);
+	}
+
+	.service:hover .service__media img {
+		scale: 1.04;
+		transition: scale 1.2s var(--ease-out);
+	}
+
+	.nav__pill {
+		transition:
+			background var(--dur-ui) var(--ease-out),
+			transform 0.5s var(--ease-out),
+			min-height var(--dur-ui) var(--ease-out);
+	}
+
+	.nav.is-scrolled .nav__pill {
+		background: var(--c-glass-strong);
+		min-height: 58px;
+	}
+
+	.nav.is-hidden:not(.is-open) .nav__pill {
+		transform: translateY(-140%);
+	}
+
+	.calc__body > * {
+		animation: step-in 0.5s var(--ease-out);
+	}
+
+	.calc__price.bump {
+		animation: bump 0.4s var(--ease-out);
+	}
+
+	.faq__answer {
+		animation: step-in 0.4s var(--ease-out);
+	}
+}
+
+@keyframes step-in {
+	from {
+		opacity: 0;
+		transform: translateX(24px);
+	}
+}
+
+@keyframes bump {
+	40% {
+		transform: scale(1.06);
+	}
+}

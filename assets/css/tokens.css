@@ -1,0 +1,140 @@
+/* Design tokens — single source for colours, type, spacing, motion.
+   Values sampled from Figma frame "Ruckzuck · DE" (node 4:2). */
+
+@font-face {
+	font-family: 'Bebas Neue';
+	src: url('../fonts/bebas-neue-latin.woff2') format('woff2');
+	font-weight: 400;
+	font-display: swap;
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2190-2199, U+2212;
+}
+@font-face {
+	font-family: 'Bebas Neue';
+	src: url('../fonts/bebas-neue-latin-ext.woff2') format('woff2');
+	font-weight: 400;
+	font-display: swap;
+	unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+	font-family: 'Oswald';
+	src: url('../fonts/oswald-cyrillic.woff2') format('woff2');
+	font-weight: 200 700;
+	font-display: swap;
+	unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+	font-family: 'Inter';
+	src: url('../fonts/inter-latin.woff2') format('woff2');
+	font-weight: 100 900;
+	font-display: swap;
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2190-2199, U+2212;
+}
+@font-face {
+	font-family: 'Inter';
+	src: url('../fonts/inter-latin-ext.woff2') format('woff2');
+	font-weight: 100 900;
+	font-display: swap;
+	unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+	font-family: 'Inter';
+	src: url('../fonts/inter-cyrillic.woff2') format('woff2');
+	font-weight: 100 900;
+	font-display: swap;
+	unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+	font-family: 'Manrope';
+	src: url('../fonts/manrope-latin.woff2') format('woff2');
+	font-weight: 200 800;
+	font-display: swap;
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2190-2199, U+2212;
+}
+@font-face {
+	font-family: 'Manrope';
+	src: url('../fonts/manrope-latin-ext.woff2') format('woff2');
+	font-weight: 200 800;
+	font-display: swap;
+	unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+	font-family: 'Manrope';
+	src: url('../fonts/manrope-cyrillic.woff2') format('woff2');
+	font-weight: 200 800;
+	font-display: swap;
+	unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+:root {
+	/* colour — Figma "Ruckzuck · DE" */
+	--c-navy: #0b1e44;
+	--c-orange: #f26b0f;
+	--c-orange-hover: #d95c06;
+	--c-orange-tint: rgba(242, 107, 15, 0.07);
+	--c-bg: #e9eef6;
+	--c-surface: #ffffff;
+	--c-black: #000000;
+	--c-text: #0b1e44;
+	--c-text-soft: rgba(43, 43, 43, 0.8);
+	--c-muted: #5b6478;
+	--c-line: #d5dce8;
+	--c-line-dark: rgba(0, 0, 0, 0.1);
+	--c-footer-line: rgba(158, 163, 191, 0.2);
+	--c-white-90: rgba(255, 255, 255, 0.85);
+	--c-white-80: rgba(255, 255, 255, 0.8);
+	--c-white-75: rgba(255, 255, 255, 0.75);
+	--c-white-70: rgba(255, 255, 255, 0.7);
+	--c-white-60: rgba(255, 255, 255, 0.6);
+	--c-white-50: rgba(255, 255, 255, 0.5);
+	--c-white-30: rgba(255, 255, 255, 0.3);
+	--c-white-12: rgba(255, 255, 255, 0.12);
+	--c-white-10: rgba(255, 255, 255, 0.1);
+	--c-white-07: rgba(255, 255, 255, 0.07);
+	--c-hero-shade: rgba(5, 20, 26, 0.5);
+	--c-hero-shade-end: rgba(5, 20, 26, 0);
+	--c-ghost-end: rgba(153, 153, 153, 0);
+	--c-glass-strong: rgba(11, 30, 68, 0.85);
+	--c-inset: rgba(0, 0, 0, 0.15);
+	--c-wa: #25d366;
+	--c-ok: #1f8a4c;
+	--c-err: #c0392b;
+	--shadow-btn: 0 0.6px 0.3px rgba(0, 0, 0, 0.18), 0 2.29px 1.14px rgba(0, 0, 0, 0.16), 0 10px 5px rgba(0, 0, 0, 0.06);
+
+	/* type */
+	--f-display: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif;
+	--f-body: 'Inter', system-ui, -apple-system, sans-serif;
+	--f-ui: 'Manrope', 'Inter', system-ui, sans-serif;
+	--fs-hero: clamp(4rem, 1.2rem + 8.5vw, 7.625rem); /* 122 */
+	--fs-h1: clamp(3.5rem, 1.5rem + 5.6vw, 6.25rem); /* 100 */
+	--fs-ghost: clamp(7rem, 2rem + 14vw, 13.75rem); /* 220 */
+	--fs-statement: clamp(2rem, 1.2rem + 2.2vw, 3rem); /* 48 */
+	--fs-contact: clamp(2.5rem, 2rem + 1.4vw, 3.125rem); /* 50 */
+	--fs-stat: 3.125rem; /* 50 */
+	--fs-calc-q: clamp(2.25rem, 1.8rem + 1.2vw, 3rem); /* 48 */
+	--fs-price: clamp(2.75rem, 2.2rem + 1.4vw, 3.5rem); /* 56 */
+	--fs-h5: 2rem; /* 32 */
+	--fs-h3: 1.75rem; /* 28 */
+	--fs-lg: 1.125rem; /* 18 */
+	--fs-body: 1rem;
+	--fs-btn: 0.9375rem; /* 15 */
+	--fs-small: 0.875rem; /* 14 */
+	--fs-13: 0.8125rem;
+	--fs-xs: 0.75rem;
+
+	/* space & shape */
+	--container: 1200px;
+	--gutter: 20px;
+	--section-y: 120px;
+	--r-12: 12px;
+	--r-16: 16px;
+	--r-20: 20px;
+	--r-24: 24px;
+	--r-28: 28px;
+	--r-32: 32px;
+	--r-pill: 999px;
+
+	/* motion (cubic-bezier close to Framer's default spring) */
+	--ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+	--dur-reveal: 0.9s;
+	--dur-ui: 0.3s;
+}
