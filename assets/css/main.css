@@ -234,7 +234,6 @@ dd {
 	--btn-bg: var(--c-orange);
 	--btn-fg: var(--c-surface);
 	border-color: var(--c-line-dark);
-	box-shadow: var(--shadow-btn);
 }
 
 /* Orange button text: white on light backgrounds, navy on dark ones. */
