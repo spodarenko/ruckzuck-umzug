@@ -1,0 +1,5 @@
+<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="3.75" y="3.75" width="16.5" height="16.5" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+<path d="M12 3.75V20.25M8.25 12.75V20.25M15.75 12.75V20.25" stroke="currentColor" stroke-width="1.5"/>
+<path d="M6.75 3.75H9.75V12.75H6.75V3.75ZM14.25 3.75H17.25V12.75H14.25V3.75Z" fill="currentColor"/>
+</svg>

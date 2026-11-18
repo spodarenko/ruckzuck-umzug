@@ -92,10 +92,6 @@
 		transform: rotate(var(--ring-rot, 0deg));
 	}
 
-	.js [data-drift] {
-		transform: translateX(var(--drift, 0));
-	}
-
 	/* Micro-interactions */
 	.btn:not(:disabled):hover {
 		transform: translateY(-2px);

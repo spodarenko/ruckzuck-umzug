@@ -1,6 +1,7 @@
 /**
  * Static build only (GitHub Pages has no PHP): the quote form opens
- * WhatsApp with the request pre-filled instead of posting to WordPress.
+ * WhatsApp with the request pre-filled instead of posting to WordPress,
+ * then shows the offer document (offer.js).
  */
 (() => {
 	const form = document.querySelector('[data-quote-form]');
@@ -22,5 +23,6 @@
 			.map((k) => `${labels[k] || k}: ${data.get(k)}`);
 		if (data.get('estimate')) lines.push('', data.get('estimate'));
 		window.open(`https://wa.me/${num[1]}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank', 'noopener');
+		if (window.rzOffer) window.rzOffer.open();
 	});
 })();

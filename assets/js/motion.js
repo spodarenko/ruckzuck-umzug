@@ -1,6 +1,6 @@
 /**
  * Scroll motion: reveals, split headline, word highlight, hero zoom,
- * parallax, rotating ring, ghost drift, counters, timeline fill, nav state.
+ * parallax, rotating ring, counters, timeline fill, nav state.
  */
 (() => {
 	const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -106,7 +106,6 @@
 	// Scroll-linked effects, batched in one rAF.
 	const nav = document.querySelector('[data-nav]');
 	const ring = document.querySelector('[data-ring] svg');
-	const drift = document.querySelector('[data-drift]');
 	const parallax = [...document.querySelectorAll('[data-parallax]')];
 	const timeline = document.querySelector('[data-timeline]');
 	const fill = document.querySelector('[data-timeline-fill]');
@@ -138,8 +137,6 @@
 			heroImg.style.setProperty('--zoom-y', `${y * 0.15}px`);
 			heroImg.style.setProperty('--zoom-s', `${1 + y * 0.0002}`);
 		}
-
-		if (drift) drift.style.setProperty('--drift', `${(progress(drift) - 0.5) * -20}%`);
 
 		parallax.forEach((img) => {
 			img.style.setProperty('--py', `${(progress(img) - 0.5) * -10}%`);
