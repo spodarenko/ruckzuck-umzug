@@ -124,7 +124,9 @@
 		const vh = window.innerHeight;
 
 		if (nav) {
-			nav.classList.toggle('is-scrolled', y > 40);
+			// Stay transparent while the hero is under the header.
+			const heroEnd = hero ? hero.getBoundingClientRect().bottom : 40 - y;
+			nav.classList.toggle('is-scrolled', heroEnd <= nav.offsetHeight);
 			nav.classList.toggle('is-hidden', y > 400 && y > lastY);
 		}
 		lastY = y;
