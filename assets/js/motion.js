@@ -60,6 +60,11 @@
 		{ rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
 	);
 	document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+	// Hero is the first screen: reveal on load, never wait for a scroll.
+	document.querySelectorAll('.hero [data-reveal]').forEach((el) => {
+		el.classList.add('is-in');
+		io.unobserve(el);
+	});
 
 	// Counters.
 	const fmt = (n, d) => n.toLocaleString(document.documentElement.lang || 'de', { minimumFractionDigits: d, maximumFractionDigits: d });
