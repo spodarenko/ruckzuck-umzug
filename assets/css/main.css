@@ -444,7 +444,7 @@ dd {
 	gap: 32px;
 	align-self: start;
 	max-width: calc(557px + 122px);
-	padding: 248px 20px 104px 122px;
+	padding: 160px 20px 104px 122px;
 }
 
 .hero__badge {
