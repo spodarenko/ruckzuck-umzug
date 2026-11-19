@@ -249,12 +249,17 @@ dd {
 }
 
 .btn--glass {
-	--btn-bg: var(--c-white-10);
+	--btn-bg: var(--c-orange-glass);
 	--btn-fg: var(--c-orange);
 }
 
 .btn--glass:hover {
-	--btn-bg: var(--c-white-12);
+	--btn-bg: var(--c-orange-glass-hover);
+}
+
+.btn--glass svg {
+	width: 24px;
+	height: 24px;
 }
 
 .btn--back {
