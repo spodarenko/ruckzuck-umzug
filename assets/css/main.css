@@ -490,13 +490,34 @@ dd {
 	color: var(--c-surface);
 }
 
+/* Menu toggle: round "+" that turns into "×" when open. */
 .nav__burger {
 	display: none;
-	background: none;
+	place-items: center;
+	flex: none;
+	width: 46px;
+	height: 46px;
+	padding: 0;
 	border: 0;
-	color: inherit;
-	padding: 8px;
+	border-radius: var(--r-pill);
+	background: var(--c-surface);
+	color: var(--c-navy);
 	cursor: pointer;
+	transition: opacity var(--dur-ui) var(--ease-out);
+}
+
+.nav__burger:hover {
+	opacity: 0.8;
+}
+
+.nav__burger svg {
+	width: 22px;
+	height: 22px;
+	transition: transform var(--dur-ui) var(--ease-out);
+}
+
+.nav.is-open .nav__burger svg {
+	transform: rotate(45deg);
 }
 
 /* ---------- hero (Figma 4:3) ---------- */
@@ -2260,7 +2281,7 @@ dd {
 	}
 
 	.nav__burger {
-		display: block;
+		display: grid;
 	}
 
 	.hero {
