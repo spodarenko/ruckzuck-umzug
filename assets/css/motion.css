@@ -92,28 +92,7 @@
 		transform: rotate(var(--ring-rot, 0deg));
 	}
 
-	/* Micro-interactions */
-	.btn:not(:disabled):hover {
-		transform: translateY(-2px);
-	}
-
-	.btn:not(:disabled):hover svg:last-child {
-		transform: translateX(3px);
-	}
-
-	/* Hero WhatsApp: leading icon, button stays put — only the fill changes */
-	.btn--glass:not(:disabled):hover,
-	.btn--glass:not(:disabled):hover svg:last-child {
-		transform: none;
-	}
-
-	/* Leading icon (svg is the only element child): keep the icon–text gap fixed */
-	.btn--wa:not(:disabled):hover svg:last-child,
-	.btn--back:not(:disabled):hover svg:last-child {
-		transform: none;
-	}
-
-	.btn svg,
+	/* Micro-interactions. Buttons don't move on hover — only the fill changes (main.css). */
 	.link-arrow svg {
 		transition: transform var(--dur-ui) var(--ease-out);
 	}
@@ -164,6 +143,14 @@
 		animation: bump 0.4s var(--ease-out);
 	}
 
+	.reviews__track {
+		animation: marquee 40s linear infinite;
+	}
+
+	.reviews__viewport:hover .reviews__track {
+		animation-play-state: paused;
+	}
+
 	.faq__answer {
 		animation: step-in 0.4s var(--ease-out);
 	}
@@ -179,5 +166,22 @@
 @keyframes bump {
 	40% {
 		transform: scale(1.06);
+	}
+}
+
+@keyframes marquee {
+	to {
+		transform: translateX(-50%);
+	}
+}
+
+/* No motion: plain horizontal scroll, without the loop copy. */
+@media (prefers-reduced-motion: reduce) {
+	.reviews__viewport {
+		overflow-x: auto;
+	}
+
+	.reviews__list[aria-hidden] {
+		display: none;
 	}
 }

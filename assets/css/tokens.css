@@ -70,6 +70,7 @@
 	--c-navy: #0b1e44;
 	--c-orange: #f26b0f;
 	--c-orange-hover: #d95c06;
+	--c-navy-hover: #1a2f5c; /* back button hover */
 	--c-orange-tint: rgba(242, 107, 15, 0.07);
 	--c-orange-soft: rgba(242, 107, 15, 0.1); /* selected option, Figma 69:2 */
 	--c-orange-glass: rgba(242, 107, 15, 0.2); /* hero WhatsApp button, Figma 4:55 */
@@ -100,6 +101,7 @@
 	--c-glass-strong: rgba(11, 30, 68, 0.85);
 	--c-inset: rgba(0, 0, 0, 0.15);
 	--c-wa: #25d366;
+	--c-wa-hover: #1ebe5a;
 	--c-ok: #1f8a4c;
 	--c-err: #c0392b;
 	--shadow-btn: 0 0.6px 0.3px rgba(0, 0, 0, 0.18), 0 2.29px 1.14px rgba(0, 0, 0, 0.16), 0 10px 5px rgba(0, 0, 0, 0.06);
@@ -111,6 +113,7 @@
 	--fs-hero: clamp(4rem, 1.2rem + 8.5vw, 7.625rem); /* 122 */
 	--fs-h1: clamp(3.5rem, 1.5rem + 5.6vw, 6.25rem); /* 100 */
 	--fs-ghost: clamp(7rem, 2rem + 14vw, 13.75rem); /* 220 */
+	--fs-ghost-xl: clamp(5rem, 19.5vw, 17.5625rem); /* 281, reviews ghost Figma 16:6 */
 	--fs-statement: clamp(2rem, 1.2rem + 2.2vw, 3rem); /* 48 */
 	--fs-contact: clamp(2.5rem, 2rem + 1.4vw, 3.125rem); /* 50 */
 	--fs-stat: 3.125rem; /* 50 */
