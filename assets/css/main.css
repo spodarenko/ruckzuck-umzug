@@ -715,7 +715,7 @@ dd {
 }
 
 /* Stacked cards: each card pins below the header, the next one slides over it */
-@media (min-width: 1101px) and (min-height: 700px) {
+@media (min-width: 1101px) and (min-height: 660px) {
 	.service {
 		position: sticky;
 		top: var(--stack-top);
