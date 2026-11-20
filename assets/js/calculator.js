@@ -62,6 +62,9 @@
 		date: '',
 		flexible: false,
 		montage: 0,
+		loadH: null, // null: half of the estimate, until the customer sets it
+		unloadH: null,
+		waitH: 0,
 		kartons: 0,
 		pack: 0,
 		unpack: 0,
@@ -113,33 +116,44 @@
 	// Floors charged for a piano: from klavier.fromFloor upwards, none with elevator.
 	const pianoFloors = (floor, elevator) => (elevator ? 0 : Math.max(0, floor - P.klavier.fromFloor + 1));
 
+	const floorsFactor = () =>
+		oneAddress()
+			? floorFactor(s.floorFrom, s.elevFrom)
+			: floorFactor(s.floorFrom, s.elevFrom) * floorFactor(s.floorTo, s.elevTo);
+	const toHalf = (hours) => Math.max(P.minHours, Math.round(hours * floorsFactor() * 2) / 2);
+
+	// Umzug / Möbel: the customer gives loading and unloading hours; until then both are half of our estimate.
+	const hoursEstimate = () =>
+		toHalf(
+			s.service === 'umzug'
+				? P.umzugRooms[String(s.rooms)][1]
+				: Object.entries(s.items).reduce((sum, [id, n]) => sum + (P.moebelItems[id] || 0) * n, 0),
+		);
+	const loadHours = () => s.loadH ?? Math.round(hoursEstimate()) / 2;
+	const unloadHours = () => s.unloadH ?? hoursEstimate() - Math.round(hoursEstimate()) / 2;
+
 	/** L = copy set for labels (UI language, or German for the offer document). */
 	function calculate(L = T) {
 		if (!s.service) return null;
 		const rows = [];
 		const row = (label, qty, unit, price) => rows.push({ label, qty, unit, price, total: round2(qty * price) });
-		const ff = oneAddress()
-			? floorFactor(s.floorFrom, s.elevFrom)
-			: floorFactor(s.floorFrom, s.elevFrom) * floorFactor(s.floorTo, s.elevTo);
 
 		// Crew = 1 driver + helpers; work hours and drive time are paid per person.
 		let crew = 2;
-		const labour = (people, hours) => {
+		const labour = (people, h) => {
 			crew = people;
-			const h = Math.max(P.minHours, Math.round(hours * ff * 2) / 2);
 			row(L.rows.driver, h, 'h', P.driverPerHour);
 			row(fmt(L.rows.helpers, people - 1), h * (people - 1), 'h', P.helperPerHour);
 		};
+		const clientHours = () => Math.max(P.minHours, loadHours() + unloadHours());
 
 		if (s.service === 'umzug') {
-			const [people, hours] = P.umzugRooms[String(s.rooms)];
-			labour(people, hours);
+			labour(P.umzugRooms[String(s.rooms)][0], clientHours());
 		} else if (s.service === 'moebel') {
-			const hours = Object.entries(s.items).reduce((sum, [id, n]) => sum + (P.moebelItems[id] || 0) * n, 0);
-			labour(2, hours);
+			labour(2, clientHours());
 		} else if (s.service === 'entruempelung') {
 			const m3 = Math.round(P.entrKinds[s.kind] * P.fill[s.fill]);
-			labour(2, m3 * P.hoursPerM3);
+			labour(2, toHalf(m3 * P.hoursPerM3));
 			row(fmt(L.rows.disposal, m3), m3, 'm3', P.disposalPerM3);
 		} else if (s.service === 'klavier') {
 			crew = P.klavier.persons;
@@ -167,6 +181,7 @@
 		if (moving && s.kartons) row(L.rows.kartons, s.kartons, 'pc', P.extras.kartonPerPiece);
 		if (s.tuning && s.service === 'klavier') row(L.rows.tuning, 1, 'flat', P.klavier.tuning);
 		if (s.halteverbot) row(L.rows.halteverbot, oneAddress() ? 1 : 2, 'pc', P.halteverbot);
+		if (s.waitH) row(L.rows.wait, s.waitH, 'h', P.waitPerHour);
 
 		let total = rows.reduce((sum, r) => sum + r.total, 0);
 		if (s.flexible) {
@@ -227,7 +242,7 @@
 			label,
 		);
 
-	const stepper = (label, value, onChange) =>
+	const stepper = (label, value, onChange, step = 1) =>
 		h(
 			'div',
 			{ class: 'stepper' },
@@ -235,11 +250,15 @@
 			h(
 				'div',
 				{},
-				h('button', { type: 'button', 'aria-label': `${label} −`, on: { click: () => onChange(Math.max(0, value - 1)) } }, '−'),
-				h('output', {}, String(value)),
-				h('button', { type: 'button', 'aria-label': `${label} +`, on: { click: () => onChange(value + 1) } }, '+'),
+				h('button', { type: 'button', 'aria-label': `${label} −`, on: { click: () => onChange(Math.max(0, value - step)) } }, '−'),
+				h('output', {}, value % 1 ? num(value, 1) : String(value)),
+				h('button', { type: 'button', 'aria-label': `${label} +`, on: { click: () => onChange(value + step) } }, '+'),
 			),
 		);
+	const hoursSteppers = () => [
+		stepper(T.loadHours, loadHours(), (n) => set({ loadH: n }), 0.5),
+		stepper(T.unloadHours, unloadHours(), (n) => set({ unloadH: n }), 0.5),
+	];
 
 	const floorOpts = Object.fromEntries(T.floorOpts.map((t, i) => [i, t]));
 	const icons = { umzug: 'truck', moebel: 'pin', entruempelung: 'box', klavier: 'piano' };
@@ -539,12 +558,14 @@
 						h('div', { class: 'calc__area' }, slider, h('label', { class: 'calc__area-num' }, field, 'm²')),
 					),
 					formula,
+					...hoursSteppers(),
 				);
 			} else if (s.service === 'moebel') {
 				f.append(h('p', { class: 'field-label full' }, T.items));
 				Object.entries(T.itemNames).forEach(([id, name]) =>
 					f.append(stepper(name, s.items[id] || 0, (n) => set({ items: { ...s.items, [id]: n } }))),
 				);
+				f.append(...hoursSteppers());
 			} else if (s.service === 'entruempelung') {
 				f.append(seg(T.kind, T.kindOpts, s.kind, 'kind'), seg(T.fill, T.fillOpts, s.fill, 'fill'));
 			} else {
@@ -605,6 +626,7 @@
 				);
 			}
 			if (s.service === 'klavier') f.append(toggle(fmt(T.tuning, eur(P.klavier.tuning)), 'tuning'));
+			f.append(stepper(fmt(T.waitHours, eur(P.waitPerHour)), s.waitH, (n) => set({ waitH: n }), 0.5));
 			f.append(toggle(T.halteverbot, 'halteverbot'));
 			return f;
 		},
