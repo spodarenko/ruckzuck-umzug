@@ -899,9 +899,9 @@ dd {
 		box-shadow var(--dur-ui) var(--ease-out);
 }
 
-/* Hover: outline only, no movement (same as the chips) */
+/* Hover: fill shift only, like the buttons (same as the chips) */
 .option:not([aria-pressed='true']):hover {
-	box-shadow: inset 0 0 0 1px var(--c-orange);
+	background: var(--c-bg-hover);
 }
 
 .option[aria-pressed='true'] {
@@ -1236,13 +1236,12 @@ dd {
 	border-radius: var(--r-8);
 }
 
-.seg button:hover {
-	box-shadow: inset 0 0 0 1px var(--c-orange);
+.seg button:not([aria-pressed='true']):hover {
+	background: var(--c-bg-hover);
 }
 
 .seg button[aria-pressed='true'] {
 	background: var(--c-orange-soft);
-	box-shadow: none;
 	color: var(--c-orange);
 }
 

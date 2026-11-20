@@ -76,6 +76,7 @@
 	--c-orange-glass: rgba(242, 107, 15, 0.2); /* hero WhatsApp button, Figma 4:55 */
 	--c-orange-glass-hover: rgba(242, 107, 15, 0.28);
 	--c-bg: #e9eef6;
+	--c-bg-hover: #dce3ef; /* calc option / chip hover */
 	--c-surface: #ffffff;
 	--c-black: #000000;
 	--c-text: #0b1e44;
