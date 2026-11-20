@@ -239,7 +239,6 @@ dd {
 /* Orange button text: white on light backgrounds, navy on dark ones. */
 .nav__cta,
 .hero .btn--primary,
-.calc__panel .btn--primary,
 .mobilebar .btn--primary {
 	--btn-fg: var(--c-navy);
 }
@@ -265,23 +264,32 @@ dd {
 .btn--back {
 	--btn-bg: var(--c-navy);
 	--btn-fg: var(--c-surface);
-	height: auto;
-	padding: 16px 20px;
+	height: 48px;
+	padding: 0 20px;
+	border: 0;
 	font-family: var(--f-body);
 	font-size: var(--fs-btn);
 	font-weight: 500;
 }
 
 .btn--back:disabled {
-	opacity: 0.5;
+	opacity: 0.4;
 }
 
 .btn--next {
 	--btn-bg: var(--c-orange);
 	--btn-fg: var(--c-surface);
-	height: auto;
-	padding: 14px 28px;
+	height: 48px;
+	padding: 0 28px;
+	border: 0;
 	font-size: var(--fs-btn);
+}
+
+/* Caret icons in the calculator nav (Figma 69:64) */
+.btn--back svg,
+.btn--next svg {
+	width: 24px;
+	height: 24px;
 }
 
 .btn--next:disabled {
@@ -345,9 +353,21 @@ dd {
 	gap: 16px;
 	height: 66px;
 	padding: 10px 10px 10px 20px;
+	position: relative;
+	isolation: isolate;
 	border-radius: var(--r-pill);
 	background: var(--c-white-10);
 	color: var(--c-surface);
+}
+
+/* Blur on a pseudo, not the pill: a backdrop-filter on the pill would stop
+   the language menu inside it from blurring the page. */
+.nav__pill::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	border-radius: inherit;
 	backdrop-filter: blur(100px);
 	-webkit-backdrop-filter: blur(100px);
 }
@@ -402,24 +422,78 @@ dd {
 	padding: 0 20px;
 }
 
+/* Language switch: flag button (Figma 66:84) + dropdown with labels */
 .lang {
+	position: relative;
+}
+
+.lang img {
+	display: block;
+	width: 24px;
+	height: 20px;
+	border-radius: 3px;
+	object-fit: cover;
+}
+
+.lang__toggle {
+	display: grid;
+	place-items: center;
+	width: 56px;
+	height: 40px;
+	padding: 0;
+	border: 0;
+	border-radius: var(--r-12);
+	background: transparent;
+	cursor: pointer;
+	transition: background var(--dur-ui) var(--ease-out);
+}
+
+.lang__toggle:hover,
+.lang__toggle[aria-expanded='true'] {
+	background: var(--c-white-10);
+}
+
+.lang__menu {
+	position: absolute;
+	top: calc(100% + 12px);
+	right: 0;
+	display: grid;
+	gap: 4px;
+	min-width: 220px;
+	margin: 0;
+	padding: 8px;
+	list-style: none;
+	border-radius: var(--r-20);
+	background: var(--c-white-10); /* same surface as .nav__pill */
+	backdrop-filter: blur(100px);
+	-webkit-backdrop-filter: blur(100px);
+	font-size: var(--fs-lg);
+}
+
+.lang__menu[hidden] {
+	display: none;
+}
+
+.lang__menu a {
 	display: flex;
-	gap: 2px;
-	font-family: var(--f-ui);
-	font-size: var(--fs-xs);
-	font-weight: 700;
-}
-
-.lang a {
-	padding: 6px 8px;
-	border-radius: var(--r-pill);
+	align-items: center;
+	gap: 16px;
+	padding: 12px 16px;
+	border-radius: var(--r-12);
+	color: var(--c-white-60);
 	text-decoration: none;
-	opacity: 0.6;
+	transition:
+		background var(--dur-ui) var(--ease-out),
+		color var(--dur-ui) var(--ease-out);
 }
 
-.lang a[aria-current] {
-	opacity: 1;
-	background: var(--c-white-12);
+.lang__menu a:hover {
+	color: var(--c-surface);
+}
+
+.lang__menu a[aria-current] {
+	background: var(--c-white-10);
+	color: var(--c-surface);
 }
 
 .nav__burger {
@@ -740,6 +814,7 @@ dd {
 	padding: 16px;
 	border-radius: var(--r-28);
 	background: var(--c-surface);
+	line-height: normal; /* Figma text boxes are "auto" height (69:118) */
 }
 
 .calc__main {
@@ -857,16 +932,18 @@ dd {
 
 .option--compact {
 	gap: 4px;
-	padding: 14px 16px;
-	border-radius: var(--r-16);
+	padding: 12px 16px;
+	border-radius: var(--r-12);
 }
 
 .option--compact strong {
+	font-family: var(--f-body);
 	font-size: var(--fs-small);
+	font-weight: 600;
 }
 
 .option--compact small {
-	font-size: var(--fs-xs);
+	font-size: var(--fs-13);
 }
 
 .calc__area {
@@ -875,12 +952,13 @@ dd {
 	gap: 24px;
 }
 
-/* Slider as in the CHECK24 reference: orange up to the thumb, navy after. */
+/* Slider (Figma 72:4): orange up to the thumb, light track after. */
 .range {
 	flex: 1;
 	height: 6px;
+	margin: 0;
 	border-radius: var(--r-pill);
-	background: linear-gradient(to right, var(--c-orange) var(--fill, 50%), var(--c-navy) var(--fill, 50%));
+	background: linear-gradient(to right, var(--c-orange) var(--fill, 50%), var(--c-bg) var(--fill, 50%));
 	appearance: none;
 	cursor: pointer;
 }
@@ -921,6 +999,7 @@ dd {
 	border: 2px solid var(--c-line-dark);
 	border-radius: var(--r-16);
 	font: inherit;
+	color: var(--c-navy);
 	text-align: center;
 }
 
@@ -936,8 +1015,9 @@ dd {
 
 .calc__formula {
 	padding: 12px 16px;
+	line-height: normal;
 	border-radius: var(--r-12);
-	background: var(--c-orange-tint);
+	background: var(--c-bg);
 	font-size: var(--fs-small);
 	font-weight: 600;
 	color: var(--c-navy);
@@ -945,6 +1025,29 @@ dd {
 
 .calc__place {
 	position: relative;
+	grid-column: 1 / -1;
+}
+
+.field.calc__place {
+	gap: 10px;
+}
+
+.field.calc__place span {
+	font-size: var(--fs-small);
+	font-weight: 600;
+	line-height: normal;
+	letter-spacing: 0;
+	text-transform: none;
+}
+
+.field.calc__place input {
+	height: 48px;
+	padding: 0 16px;
+	border: 1px solid var(--c-line);
+	border-radius: var(--r-12);
+	font-size: var(--fs-btn);
+	letter-spacing: 0;
+	color: var(--c-navy);
 }
 
 .calc__suggest {
@@ -977,23 +1080,21 @@ dd {
 }
 
 .cal {
-	max-width: 380px;
-	padding: 16px;
-	border: 2px solid var(--c-line-dark);
-	border-radius: var(--r-16);
-	background: var(--c-surface);
+	padding: 32px;
+	border-radius: var(--r-12);
+	background: var(--c-bg);
 }
 
 .cal__head {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	margin-bottom: 12px;
+	margin-bottom: 16px;
 }
 
 .cal__title {
-	font-family: var(--f-ui);
-	font-weight: 700;
+	font-size: var(--fs-btn);
+	font-weight: 600;
 	text-transform: capitalize;
 	color: var(--c-navy);
 }
@@ -1003,8 +1104,9 @@ dd {
 	height: 36px;
 	border: 0;
 	border-radius: 50%;
-	background: var(--c-bg);
-	font-weight: 700;
+	background: none;
+	font-size: var(--fs-lg);
+	font-weight: 600;
 	color: var(--c-navy);
 	cursor: pointer;
 }
@@ -1017,55 +1119,62 @@ dd {
 .cal__grid {
 	display: grid;
 	grid-template-columns: repeat(7, 1fr);
-	gap: 4px;
+	gap: 16px 4px;
 	text-align: center;
 }
 
 .cal__wd {
 	padding: 4px 0;
-	font-size: var(--fs-xs);
+	font-size: var(--fs-13);
+	font-weight: 600;
 	color: var(--c-muted);
 	text-transform: capitalize;
 }
 
 .cal__day {
-	aspect-ratio: 1;
+	height: 36px;
 	border: 0;
-	border-radius: var(--r-12);
+	border-radius: var(--r-10);
 	background: none;
 	font: inherit;
 	font-size: var(--fs-small);
-	font-weight: 600;
+	font-weight: 400;
 	color: var(--c-navy);
 	cursor: pointer;
 }
 
 .cal__day:not(:disabled):hover {
-	background: var(--c-bg);
+	background: var(--c-surface);
 }
 
 .cal__day:disabled {
-	color: var(--c-line);
+	color: var(--c-disabled);
 	cursor: default;
 }
 
 .cal__day[aria-pressed='true'] {
+	font-weight: 600;
 	background: var(--c-orange);
 	color: var(--c-surface);
 }
 
 .calc__km-status {
-	margin-top: -12px;
-	min-height: 1.2em;
+	padding: 10px 14px;
+	border-radius: var(--r-10);
 	font-size: var(--fs-13);
 	color: var(--c-muted);
 }
 
+.calc__km-status:empty {
+	display: none;
+}
+
 .calc__km-status[data-state='route'],
 .calc__km-status[data-state='estimate'] {
+	background: var(--c-orange-soft);
 	font-size: var(--fs-small);
-	font-weight: 600;
-	color: var(--c-navy);
+	font-weight: 500;
+	color: var(--c-orange);
 }
 
 .calc__km-status[data-state='notFound'] {
@@ -1085,10 +1194,15 @@ dd {
 .field-label {
 	margin-bottom: 10px;
 	font-size: var(--fs-small);
+	font-weight: 600;
+	line-height: normal;
+	color: var(--c-navy);
+}
+
+.field-label--caps {
 	font-weight: 500;
 	letter-spacing: 0.32px;
 	text-transform: uppercase;
-	color: var(--c-navy);
 }
 
 .seg {
@@ -1098,41 +1212,46 @@ dd {
 }
 
 .seg button {
-	min-height: 44px;
+	min-height: 41px;
 	padding: 0 18px;
-	border: 1px solid transparent;
-	border-radius: var(--r-pill);
+	border: 0;
+	border-radius: var(--r-12);
 	background: var(--c-bg);
-	font-family: var(--f-ui);
-	font-weight: 700;
+	font-family: var(--f-body);
+	font-weight: 500;
 	font-size: var(--fs-small);
 	color: var(--c-navy);
 	cursor: pointer;
 	transition:
 		background var(--dur-ui),
-		border-color var(--dur-ui),
+		box-shadow var(--dur-ui),
 		color var(--dur-ui);
 }
 
+.seg--floor button {
+	border-radius: var(--r-8);
+}
+
 .seg button:hover {
-	border-color: var(--c-orange);
+	box-shadow: inset 0 0 0 1px var(--c-orange);
 }
 
 .seg button[aria-pressed='true'] {
 	background: var(--c-orange-soft);
-	border-color: var(--c-orange);
+	box-shadow: none;
+	color: var(--c-orange);
 }
 
 .stepper {
 	display: flex;
+	grid-column: 1 / -1;
 	align-items: center;
 	justify-content: space-between;
-	gap: 8px;
-	padding: 8px 8px 8px 16px;
-	border-radius: var(--r-16);
+	gap: 12px;
+	padding: 10px 16px;
+	border-radius: var(--r-12);
 	background: var(--c-bg);
 	font-size: var(--fs-small);
-	font-weight: 600;
 }
 
 .stepper div {
@@ -1143,6 +1262,8 @@ dd {
 
 .stepper output {
 	min-width: 1.5em;
+	font-size: var(--fs-btn);
+	font-weight: 600;
 	text-align: center;
 }
 
@@ -1150,9 +1271,10 @@ dd {
 	width: 32px;
 	height: 32px;
 	border: 0;
-	border-radius: 50%;
+	border-radius: var(--r-8);
 	background: var(--c-surface);
-	font-size: 1.1rem;
+	font-size: var(--fs-body);
+	font-weight: 600;
 	color: var(--c-navy);
 	cursor: pointer;
 }
@@ -1160,40 +1282,90 @@ dd {
 .toggle {
 	display: flex;
 	align-items: center;
-	gap: 10px;
+	gap: 12px;
+	padding: 12px 16px;
+	border-radius: var(--r-12);
+	background: var(--c-bg);
 	font-size: var(--fs-small);
-	font-weight: 600;
 	cursor: pointer;
+	transition: background var(--dur-ui);
+}
+
+.toggle:has(input:checked) {
+	background: var(--c-orange-soft);
+	font-weight: 500;
+	color: var(--c-orange);
 }
 
 .toggle input {
+	display: grid;
+	flex-shrink: 0;
+	place-items: center;
 	width: 20px;
 	height: 20px;
-	accent-color: var(--c-orange);
+	margin: 0;
+	border: 1px solid var(--c-line);
+	border-radius: var(--r-6);
+	background: var(--c-surface);
+	appearance: none;
+	cursor: pointer;
+}
+
+.toggle input:checked {
+	border-color: var(--c-orange);
+	background: var(--c-orange);
+}
+
+.toggle input:checked::after {
+	content: '✓';
+	font-size: var(--fs-xs);
+	font-weight: 600;
+	color: var(--c-surface);
+}
+
+.toggle input:focus-visible {
+	outline: 2px solid var(--c-orange);
+	outline-offset: 2px;
 }
 
 .calc__result {
 	display: flex;
 	flex-direction: column;
-	gap: 16px;
+	gap: 20px;
 }
 
 .calc__result .calc__price {
-	font-size: var(--fs-price);
+	font-size: var(--fs-result);
 	line-height: 1;
-	color: var(--c-orange);
+	color: var(--c-navy);
+}
+
+.calc__result .muted {
+	font-size: var(--fs-small);
+	color: var(--c-muted);
 }
 
 .calc__result-ctas {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 10px;
+	gap: 12px;
+}
+
+.calc__result-ctas .btn {
+	height: 48px;
+	padding: 0 28px;
+}
+
+.calc__result-ctas .btn--glass {
+	gap: 6px;
+	padding: 0 32px;
+	font-size: var(--fs-body);
 }
 
 .chips {
 	display: flex;
 	gap: 12px;
-	margin: 1px 0 0;
+	margin: 0;
 	padding: 0;
 	list-style: none;
 }
@@ -1279,6 +1451,8 @@ dd {
 }
 
 .calc__summary dt {
+	flex-shrink: 0;
+	white-space: nowrap;
 	color: var(--c-white-60);
 }
 
@@ -1355,6 +1529,17 @@ dd {
 .calc__breakdown .total span:last-child {
 	font-weight: 600;
 	color: var(--c-orange);
+}
+
+.calc__panel .btn--outline-light {
+	--btn-bg: var(--c-white-10);
+	height: 45px;
+	padding: 0 20px;
+	border: 0;
+}
+
+.calc__panel .btn--outline-light:hover {
+	--btn-bg: var(--c-white-12);
 }
 
 .calc__empty {
@@ -1907,9 +2092,9 @@ dd {
 
 	.nav__links {
 		position: absolute;
-		top: calc(100% - 8px);
-		left: var(--gutter);
-		right: var(--gutter);
+		top: calc(100% + 8px);
+		left: 0;
+		right: 0;
 		flex-direction: column;
 		gap: 0;
 		padding: 8px;
@@ -2004,13 +2189,8 @@ dd {
 }
 
 @media (max-width: 720px) {
-	.nav__cta,
-	.lang {
+	.nav__cta {
 		display: none;
-	}
-
-	.nav.is-open .lang {
-		display: flex;
 	}
 
 	.process__head {

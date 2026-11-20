@@ -71,7 +71,7 @@
 	--c-orange: #f26b0f;
 	--c-orange-hover: #d95c06;
 	--c-orange-tint: rgba(242, 107, 15, 0.07);
-	--c-orange-soft: rgba(242, 107, 15, 0.12); /* selected option, Figma 13:20 */
+	--c-orange-soft: rgba(242, 107, 15, 0.1); /* selected option, Figma 69:2 */
 	--c-orange-glass: rgba(242, 107, 15, 0.2); /* hero WhatsApp button, Figma 4:55 */
 	--c-orange-glass-hover: rgba(242, 107, 15, 0.28);
 	--c-bg: #e9eef6;
@@ -81,6 +81,7 @@
 	--c-text-soft: rgba(43, 43, 43, 0.8);
 	--c-muted: #5b6478;
 	--c-line: #d5dce8;
+	--c-disabled: #b4bccb; /* past calendar days, Figma 69:852 */
 	--c-line-dark: rgba(0, 0, 0, 0.1);
 	--c-footer-line: rgba(158, 163, 191, 0.2);
 	--c-white-90: rgba(255, 255, 255, 0.85);
@@ -113,8 +114,9 @@
 	--fs-statement: clamp(2rem, 1.2rem + 2.2vw, 3rem); /* 48 */
 	--fs-contact: clamp(2.5rem, 2rem + 1.4vw, 3.125rem); /* 50 */
 	--fs-stat: 3.125rem; /* 50 */
-	--fs-calc-q: clamp(2.25rem, 1.8rem + 1.2vw, 3rem); /* 48 */
-	--fs-price: clamp(2.75rem, 2.2rem + 1.4vw, 3.5rem); /* 56 */
+	--fs-calc-q: clamp(2.25rem, 1.2rem + 2vw, 3rem); /* 48 at 1440 */
+	--fs-price: clamp(2.75rem, 2.2rem + 1.5vw, 3.5rem); /* 56 at 1440 */
+	--fs-result: clamp(3rem, 2.4rem + 1.6vw, 4rem); /* 64 */
 	--fs-h5: 2rem; /* 32 */
 	--fs-h3: 1.75rem; /* 28 */
 	--fs-lg: 1.125rem; /* 18 */
@@ -128,6 +130,9 @@
 	--container: 1200px;
 	--gutter: 20px;
 	--section-y: 120px;
+	--r-6: 6px;
+	--r-8: 8px;
+	--r-10: 10px;
 	--r-12: 12px;
 	--r-16: 16px;
 	--r-20: 20px;

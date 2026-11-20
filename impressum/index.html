@@ -10,11 +10,11 @@
 <link rel="preload" href="../assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
 
 
-<link rel='stylesheet' id='rz-tokens-css' href='../assets/css/tokens.css?ver=1795062679' media='all' />
-<link rel='stylesheet' id='rz-main-css' href='../assets/css/main.css?ver=1795062681' media='all' />
-<link rel='stylesheet' id='rz-motion-css' href='../assets/css/motion.css?ver=1794979847' media='all' />
+<link rel='stylesheet' id='rz-tokens-css' href='../assets/css/tokens.css?ver=1795149924' media='all' />
+<link rel='stylesheet' id='rz-main-css' href='../assets/css/main.css?ver=1795150223' media='all' />
+<link rel='stylesheet' id='rz-motion-css' href='../assets/css/motion.css?ver=1795064608' media='all' />
 <script data-wp-strategy="defer" defer id="rz-motion-js" src="../assets/js/motion.js?ver=1795062581"></script>
-<script data-wp-strategy="defer" defer id="rz-main-js" src="../assets/js/main.js?ver=1792992945"></script>
+<script data-wp-strategy="defer" defer id="rz-main-js" src="../assets/js/main.js?ver=1795064158"></script>
 </head>
 <body class="wp-singular page-template-default page page-id-4 wp-theme-ruckzuck">
 <a class="skip-link" href="#main">Zum Inhalt springen</a>
@@ -33,8 +33,30 @@
 		</nav>
 
 		<div class="nav__side">
-						<a class="btn btn--primary nav__cta" href="../#rechner">Kostenloses Angebot</a>
-			<button class="nav__burger" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menü" data-burger>
+			<a class="btn btn--primary nav__cta" href="../#rechner">Kostenloses Angebot</a>
+										<div class="lang" data-lang>
+				<button class="lang__toggle" type="button" aria-expanded="false" aria-controls="lang-menu" aria-label="Sprache: Deutsch" data-lang-toggle>
+					<img src="../assets/img/flags/de.svg?v=1795064124" alt="" width="24" height="20">
+				</button>
+				<ul class="lang__menu" id="lang-menu" hidden>
+										<li>
+						<a href="../" hreflang="de" lang="de" aria-current="true">
+							<img src="../assets/img/flags/de.svg?v=1795064124" alt="" width="24" height="20">
+							Deutsch						</a>
+					</li>
+										<li>
+						<a href="../en/" hreflang="en" lang="en" >
+							<img src="../assets/img/flags/en.svg?v=1795064124" alt="" width="24" height="20">
+							English						</a>
+					</li>
+										<li>
+						<a href="../uk/" hreflang="uk" lang="uk" >
+							<img src="../assets/img/flags/uk.svg?v=1795064124" alt="" width="24" height="20">
+							Українська						</a>
+					</li>
+									</ul>
+			</div>
+						<button class="nav__burger" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Menü" data-burger>
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
 			</button>
 		</div>

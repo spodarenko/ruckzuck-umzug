@@ -24,7 +24,6 @@
 		price: $('[data-calc-price]'),
 		summary: $('[data-calc-summary]'),
 		breakdown: $('[data-calc-breakdown]'),
-		request: $('[data-calc-request]'),
 		tag: $('[data-calc-tag]'),
 		details: $('[data-calc-details]'),
 	};
@@ -91,6 +90,7 @@
 	};
 	const num = (n, digits = 2) => n.toLocaleString(lang, { minimumFractionDigits: digits, maximumFractionDigits: digits });
 	const eur = (n) => `${num(n)} €`;
+	const eurRound = (n) => `${num(Math.round(n), 0)} €`; // panel: estimate, no cents
 	const round2 = (n) => Math.round(n * 100) / 100;
 	const round10 = (n) => Math.round(n / 10) * 10;
 	const isPlz = (v) => /^\d{5}$/.test(v);
@@ -204,7 +204,7 @@
 			h('p', { class: 'field-label' }, label),
 			h(
 				'div',
-				{ class: 'seg', role: 'group', 'aria-label': label },
+				{ class: key.startsWith('floor') ? 'seg seg--floor' : 'seg', role: 'group', 'aria-label': label },
 				Object.entries(options).map(([v, text]) =>
 					h(
 						'button',
@@ -258,7 +258,7 @@
 		const node = root.querySelector('[data-km-status]');
 		if (!node) return;
 		const result = s.km && key !== 'loading' && key !== 'notFound';
-		node.textContent = key ? `${result ? `${s.km} km · ` : ''}${fmt(T.kmStatus[key], ...args)}` : '';
+		node.textContent = key ? `${fmt(T.kmStatus[key], ...args)}${result ? ` · ${s.km} km` : ''}` : '';
 		node.dataset.state = key || '';
 	}
 
@@ -427,8 +427,8 @@
 				},
 				text,
 			);
-		const prev = nav(-1, T.calPrev, '<');
-		const next = nav(1, T.calNext, '>');
+		const prev = nav(-1, T.calPrev, '‹');
+		const next = nav(1, T.calNext, '›');
 
 		// Monday-first weekday names in the page language.
 		const weekdays = Array.from({ length: 7 }, (_, i) =>
@@ -496,12 +496,7 @@
 		() => {
 			const f = h('div', { class: 'fields' });
 			if (s.service === 'umzug') {
-				const roomOpts = Object.fromEntries(
-					T.roomsOpts.map((t, i) => {
-						const [min, max] = P.areaRanges[String(i + 1)];
-						return [i + 1, `${t} · ${min}–${max} m²`];
-					}),
-				);
+				const roomOpts = Object.fromEntries(T.roomsOpts.map((t, i) => [i + 1, t]));
 				const [min, max] = areaRange();
 				const formula = h('p', { class: 'calc__formula full', 'aria-live': 'polite' }, volumeText());
 				const fill = () => slider.style.setProperty('--fill', `${((area() - min) / (max - min)) * 100}%`);
@@ -540,7 +535,7 @@
 					h(
 						'div',
 						{ class: 'full' },
-						h('p', { class: 'field-label' }, fmt(T.area, min, max)),
+						h('p', { class: 'field-label field-label--caps' }, fmt(T.area, min, max)),
 						h('div', { class: 'calc__area' }, slider, h('label', { class: 'calc__area-num' }, field, 'm²')),
 					),
 					formula,
@@ -625,7 +620,7 @@
 					'div',
 					{ class: 'calc__result-ctas' },
 					h('a', { class: 'btn btn--primary', href: '#kontakt', on: { click: toForm } }, T.request),
-					h('a', { class: 'btn btn--wa', href: waLink(r), target: '_blank', rel: 'noopener' }, T.whatsapp),
+					h('a', { class: 'btn btn--glass', href: waLink(r), target: '_blank', rel: 'noopener' }, iconSvg('whatsapp'), T.whatsapp),
 				),
 			);
 		},
@@ -646,9 +641,10 @@
 		}
 	};
 
-	const routeText = () => {
+	// short: place names only (PLZ as fallback) so the summary panel stays on one line.
+	const routeText = (short = false) => {
 		const [a, b] = s.places;
-		const plzPlace = (plz, place) => (place ? `${plz} ${place}` : plz);
+		const plzPlace = (plz, place) => (place ? (short ? place : `${plz} ${place}`) : plz);
 		return oneAddress() ? plzPlace(s.from, b) : `${plzPlace(s.from, a)} > ${plzPlace(s.to, b)}`;
 	};
 
@@ -721,7 +717,6 @@
 		const r = calculate();
 		el.summary.replaceChildren();
 		el.breakdown.replaceChildren();
-		el.request.hidden = !r;
 
 		if (!r) {
 			el.price.textContent = example.price;
@@ -742,9 +737,8 @@
 		}
 
 		const add = (k, v) => v && el.summary.append(h('div', {}, h('dt', {}, k), h('dd', {}, v)));
-		add(T.summary.service, serviceTitle());
-		if (s.service === 'umzug') add(T.summary.volume, `${num(volume(), 1)} m³ (${area()} m²)`);
-		if (s.from) add(T.summary.route, oneAddress() ? routeText() : `${routeText()}${s.to ? '' : ' > …'}`);
+		add(T.summary.service, s.service === 'umzug' ? `${serviceTitle()} · ${T.roomsOpts[s.rooms - 1]}` : serviceTitle());
+		if (s.from) add(T.summary.route, oneAddress() ? routeText(true) : `${routeText(true)}${s.to ? '' : ' > …'}`);
 		if (s.km) add(T.summary.km, `${s.kmSource === 'estimate' ? `${T.approx} ` : ''}${s.km} km`);
 		if (s.step >= 2) {
 			const fl = (f) => T.floorOpts[f];
@@ -780,11 +774,11 @@
 							? null
 							: h('small', {}, `${num(row.qty, row.unit === 'h' ? 2 : 0)} ${T.units[row.unit]} × ${eur(row.price)}`),
 					),
-					h('span', {}, eur(row.total)),
+					h('span', {}, eurRound(row.total)),
 				),
 			),
 		);
-		el.breakdown.append(rowsBox, h('div', { class: 'row total' }, h('span', {}, T.rows.total), h('span', {}, eur(r.total))));
+		el.breakdown.append(rowsBox, h('div', { class: 'row total' }, h('span', {}, T.rows.total), h('span', {}, eurRound(r.total))));
 	}
 
 	function render() {
@@ -799,7 +793,6 @@
 
 	el.back.addEventListener('click', () => set({ step: Math.max(0, s.step - 1) }));
 	el.next.addEventListener('click', () => valid() && set({ step: Math.min(STEPS - 1, s.step + 1) }));
-	el.request.addEventListener('click', toForm);
 	// Breakdown stays folded behind "Details" until the visitor asks for it.
 	el.details.addEventListener('click', () => {
 		detailsOpen = !detailsOpen;

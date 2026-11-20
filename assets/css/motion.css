@@ -101,6 +101,12 @@
 		transform: translateX(3px);
 	}
 
+	/* Hero WhatsApp: leading icon, button stays put — only the fill changes */
+	.btn--glass:not(:disabled):hover,
+	.btn--glass:not(:disabled):hover svg:last-child {
+		transform: none;
+	}
+
 	.btn svg,
 	.link-arrow svg {
 		transition: transform var(--dur-ui) var(--ease-out);
@@ -134,6 +140,10 @@
 	.nav.is-scrolled .nav__pill {
 		background: var(--c-glass-strong);
 		min-height: 58px;
+	}
+
+	.nav.is-scrolled .lang__menu {
+		background: var(--c-glass-strong);
 	}
 
 	.nav.is-hidden:not(.is-open) .nav__pill {
