@@ -395,31 +395,15 @@ dd {
 	line-height: 23.2px;
 }
 
-/* Text roll on hover: label slides up, copy slides in from below. */
 .nav__links a {
 	display: block;
-	height: 23.2px;
-	overflow: hidden;
 	text-decoration: none;
+	transition: opacity var(--dur-ui) var(--ease-out);
 }
 
-.nav__links a > span {
-	position: relative;
-	display: block;
-	transition: transform 0.45s var(--ease-out);
-}
-
-.nav__links a > span::after {
-	content: attr(data-text);
-	position: absolute;
-	left: 0;
-	top: 100%;
-	color: var(--c-orange);
-}
-
-.nav__links a:hover > span,
-.nav__links a:focus-visible > span {
-	transform: translateY(-100%);
+.nav__links a:hover,
+.nav__links a:focus-visible {
+	opacity: 0.6;
 }
 
 .nav__side {
@@ -2267,7 +2251,6 @@ dd {
 	}
 
 	.nav__links a {
-		height: auto;
 		padding: 14px 16px;
 	}
 

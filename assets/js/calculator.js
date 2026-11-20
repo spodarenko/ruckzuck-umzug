@@ -750,9 +750,6 @@
 		const price = range(r);
 		if (price !== lastPrice) {
 			el.price.textContent = price;
-			el.price.classList.remove('bump');
-			void el.price.offsetWidth; // restart animation
-			el.price.classList.add('bump');
 			lastPrice = price;
 		}
 

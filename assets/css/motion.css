@@ -1,63 +1,26 @@
 /* Motion layer. Patterns inspired by cardfly.framer.website, re-implemented:
-   reveal on scroll (up / label / scale / left / right / tilt / fade), split headline,
+   fade-in on scroll, split headline,
    word-by-word statement, rotating ring, hero zoom, counters, timeline fill.
    Only active with JS (html.js) and without prefers-reduced-motion. */
 
 @media (prefers-reduced-motion: no-preference) {
 	.js [data-reveal] {
 		opacity: 0;
-		transition:
-			opacity var(--dur-reveal) var(--ease-out) var(--d, 0s),
-			transform var(--dur-reveal) var(--ease-out) var(--d, 0s);
-		will-change: transform, opacity;
-	}
-
-	.js [data-reveal='up'] {
-		transform: translateY(80px);
-	}
-
-	.js [data-reveal='label'] {
-		transform: translateY(50px);
-	}
-
-	.js [data-reveal='scale'] {
-		transform: scale(0.8);
-	}
-
-	.js [data-reveal='left'] {
-		transform: translateX(-66px);
-	}
-
-	.js [data-reveal='right'] {
-		transform: translateX(66px);
-	}
-
-	.js [data-reveal='tilt'] {
-		transform: perspective(1200px) translateY(80px) rotateX(12deg);
-		transform-origin: 50% 100%;
+		transition: opacity var(--dur-reveal) var(--ease-out) var(--d, 0s);
 	}
 
 	.js [data-reveal].is-in {
 		opacity: 1;
-		transform: none;
 	}
 
-	/* Split headline: each word slides up from a mask. */
-	.js [data-split] .w {
-		display: inline-block;
-		overflow: hidden;
-		vertical-align: top;
-		padding-bottom: 0.06em;
-	}
-
+	/* Split headline: words fade in one by one. */
 	.js [data-split] .w > span {
-		display: inline-block;
-		transform: translateY(105%);
-		transition: transform 1s var(--ease-out) calc(var(--i) * 0.08s + 0.1s);
+		opacity: 0;
+		transition: opacity 1s var(--ease-out) calc(var(--i) * 0.08s + 0.1s);
 	}
 
 	.js [data-split].is-in .w > span {
-		transform: none;
+		opacity: 1;
 	}
 
 	/* Statement: words light up as you scroll through. */
@@ -92,15 +55,7 @@
 		transform: rotate(var(--ring-rot, 0deg));
 	}
 
-	/* Micro-interactions. Buttons don't move on hover — only the fill changes (main.css). */
-	.link-arrow svg {
-		transition: transform var(--dur-ui) var(--ease-out);
-	}
-
-	.link-arrow:hover svg {
-		transform: translateX(4px);
-	}
-
+	/* Hover never moves anything — only fill or opacity changes (main.css). */
 	.service__media img,
 	.timeline__item img,
 	.about__img,
@@ -108,11 +63,6 @@
 		transition:
 			transform var(--dur-reveal) var(--ease-out),
 			opacity var(--dur-reveal) var(--ease-out);
-	}
-
-	.service:hover .service__media img {
-		scale: 1.04;
-		transition: scale 1.2s var(--ease-out);
 	}
 
 	.nav__pill {
@@ -139,10 +89,6 @@
 		animation: step-in 0.5s var(--ease-out);
 	}
 
-	.calc__price.bump {
-		animation: bump 0.4s var(--ease-out);
-	}
-
 	.reviews__track {
 		animation: marquee 40s linear infinite;
 	}
@@ -159,13 +105,6 @@
 @keyframes step-in {
 	from {
 		opacity: 0;
-		transform: translateX(24px);
-	}
-}
-
-@keyframes bump {
-	40% {
-		transform: scale(1.06);
 	}
 }
 
