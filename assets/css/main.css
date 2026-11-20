@@ -1317,7 +1317,8 @@ dd {
 	color: var(--c-orange);
 }
 
-.toggle input {
+.toggle input,
+.consent input {
 	display: grid;
 	flex-shrink: 0;
 	place-items: center;
@@ -1331,19 +1332,22 @@ dd {
 	cursor: pointer;
 }
 
-.toggle input:checked {
+.toggle input:checked,
+.consent input:checked {
 	border-color: var(--c-orange);
 	background: var(--c-orange);
 }
 
-.toggle input:checked::after {
+.toggle input:checked::after,
+.consent input:checked::after {
 	content: '✓';
 	font-size: var(--fs-xs);
 	font-weight: 600;
 	color: var(--c-surface);
 }
 
-.toggle input:focus-visible {
+.toggle input:focus-visible,
+.consent input:focus-visible {
 	outline: 2px solid var(--c-orange);
 	outline-offset: 2px;
 }
@@ -2067,9 +2071,7 @@ dd {
 	appearance: none;
 	-webkit-appearance: none;
 	padding-right: 44px;
-	background-image:
-		linear-gradient(45deg, transparent 50%, var(--c-navy) 50%),
-		linear-gradient(135deg, var(--c-navy) 50%, transparent 50%);
+	background-image: linear-gradient(45deg, transparent 50%, var(--c-navy) 50%), linear-gradient(135deg, var(--c-navy) 50%, transparent 50%);
 	background-position:
 		right 22px center,
 		right 17px center;
@@ -2108,14 +2110,6 @@ dd {
 	gap: 10px;
 	font-size: var(--fs-xs);
 	color: var(--c-text-soft);
-}
-
-.consent input {
-	width: 18px;
-	height: 18px;
-	margin: 0;
-	accent-color: var(--c-orange);
-	flex-shrink: 0;
 }
 
 .contact__form .btn {
