@@ -2054,12 +2054,12 @@ dd {
 	align-items: center;
 	gap: 16px;
 	padding-top: 45px;
-	border-top: 1px solid var(--c-footer-line);
+	color: var(--c-white-40);
 }
 
-.footer__bottom span:last-child {
-	font-size: var(--fs-xs);
-	color: var(--c-white-50);
+.footer__credit b {
+	font-weight: 400;
+	color: var(--c-surface);
 }
 
 .mobilebar {

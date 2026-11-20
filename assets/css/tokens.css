@@ -83,13 +83,13 @@
 	--c-line: #d5dce8;
 	--c-disabled: #b4bccb; /* past calendar days, Figma 69:852 */
 	--c-line-dark: rgba(0, 0, 0, 0.1);
-	--c-footer-line: rgba(158, 163, 191, 0.2);
 	--c-white-90: rgba(255, 255, 255, 0.85);
 	--c-white-80: rgba(255, 255, 255, 0.8);
 	--c-white-75: rgba(255, 255, 255, 0.75);
 	--c-white-70: rgba(255, 255, 255, 0.7);
 	--c-white-60: rgba(255, 255, 255, 0.6);
 	--c-white-50: rgba(255, 255, 255, 0.5);
+	--c-white-40: rgba(255, 255, 255, 0.4);
 	--c-white-30: rgba(255, 255, 255, 0.3);
 	--c-white-12: rgba(255, 255, 255, 0.12);
 	--c-white-10: rgba(255, 255, 255, 0.1);
