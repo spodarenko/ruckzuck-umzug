@@ -140,6 +140,7 @@
 	--r-28: 28px;
 	--r-32: 32px;
 	--r-pill: 999px;
+	--stack-top: 150px; /* sticky offset of stacked service cards */
 
 	/* motion (cubic-bezier close to Framer's default spring) */
 	--ease-out: cubic-bezier(0.22, 1, 0.36, 1);

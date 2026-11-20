@@ -107,6 +107,12 @@
 		transform: none;
 	}
 
+	/* Leading icon (svg is the only element child): keep the icon–text gap fixed */
+	.btn--wa:not(:disabled):hover svg:last-child,
+	.btn--back:not(:disabled):hover svg:last-child {
+		transform: none;
+	}
+
 	.btn svg,
 	.link-arrow svg {
 		transition: transform var(--dur-ui) var(--ease-out);

@@ -250,6 +250,7 @@ dd {
 .btn--glass {
 	--btn-bg: var(--c-orange-glass);
 	--btn-fg: var(--c-orange);
+	gap: 6px; /* Figma 4:55 */
 }
 
 .btn--glass:hover {
@@ -548,9 +549,11 @@ dd {
 }
 
 .hero__ctas {
-	display: flex;
-	flex-wrap: wrap;
+	display: inline-grid;
+	grid-auto-columns: 1fr; /* equal widths, as in Figma 4:51 / 4:55 */
+	grid-auto-flow: column;
 	gap: 10px;
+	width: max-content;
 }
 
 .hero__media {
@@ -709,6 +712,14 @@ dd {
 
 .service--flip {
 	grid-template-columns: 739fr 411fr;
+}
+
+/* Stacked cards: each card pins below the header, the next one slides over it */
+@media (min-width: 1101px) and (min-height: 700px) {
+	.service {
+		position: sticky;
+		top: var(--stack-top);
+	}
 }
 
 .service--flip .service__body {
@@ -2189,6 +2200,10 @@ dd {
 }
 
 @media (max-width: 720px) {
+	.hero__ctas {
+		grid-auto-flow: row;
+	}
+
 	.nav__cta {
 		display: none;
 	}
