@@ -117,9 +117,7 @@
 	const pianoFloors = (floor, elevator) => (elevator ? 0 : Math.max(0, floor - P.klavier.fromFloor + 1));
 
 	const floorsFactor = () =>
-		oneAddress()
-			? floorFactor(s.floorFrom, s.elevFrom)
-			: floorFactor(s.floorFrom, s.elevFrom) * floorFactor(s.floorTo, s.elevTo);
+		oneAddress() ? floorFactor(s.floorFrom, s.elevFrom) : floorFactor(s.floorFrom, s.elevFrom) * floorFactor(s.floorTo, s.elevTo);
 	const toHalf = (hours) => Math.max(P.minHours, Math.round(hours * floorsFactor() * 2) / 2);
 
 	// Umzug / Möbel: the customer gives loading and unloading hours; until then both are half of our estimate.
