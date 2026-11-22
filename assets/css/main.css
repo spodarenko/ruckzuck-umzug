@@ -917,6 +917,7 @@ dd {
 	cursor: pointer;
 	transition:
 		background var(--dur-ui) var(--ease-out),
+		color var(--dur-ui) var(--ease-out),
 		box-shadow var(--dur-ui) var(--ease-out);
 }
 
@@ -925,8 +926,14 @@ dd {
 	background: var(--c-bg-hover);
 }
 
+/* Selected (Figma 13:20): orange tint, orange badge, orange title and subline. */
 .option[aria-pressed='true'] {
 	background: var(--c-orange-soft);
+	color: var(--c-orange);
+}
+
+.option[aria-pressed='true'] small {
+	color: var(--c-orange);
 }
 
 .option[aria-pressed='true'] .icon-badge {
