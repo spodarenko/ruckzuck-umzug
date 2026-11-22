@@ -926,6 +926,15 @@ dd {
 	background: var(--c-bg-hover);
 }
 
+.option--wa {
+	text-decoration: none;
+}
+
+.option--wa .icon-badge {
+	background: var(--c-wa);
+	color: var(--c-surface);
+}
+
 /* Selected (Figma 13:20): orange tint, orange badge, orange title and subline. */
 .option[aria-pressed='true'] {
 	background: var(--c-orange-soft);

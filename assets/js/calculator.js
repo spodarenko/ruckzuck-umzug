@@ -514,6 +514,13 @@
 						h('span', { class: 'option__text' }, h('strong', {}, title), h('small', {}, sub)),
 					),
 				),
+				// Anything else: no calculation, straight to WhatsApp.
+				h(
+					'a',
+					{ class: 'option option--wa', href: waTo(T.other[2]), target: '_blank', rel: 'noopener' },
+					h('span', { class: 'icon-badge' }, iconSvg('whatsapp')),
+					h('span', { class: 'option__text' }, h('strong', {}, T.other[0]), h('small', {}, T.other[1])),
+				),
 			),
 		// 1 — details
 		() => {
@@ -697,10 +704,14 @@
 		return lines.filter(Boolean).join('\n');
 	};
 
-	function waLink(r) {
-		const base = document.querySelector('.btn--wa')?.getAttribute('href') || '';
+	function waTo(text) {
+		const base = document.querySelector('a[href*="wa.me/"]')?.getAttribute('href') || '';
 		const wa = base.match(/wa\.me\/(\d+)/);
-		return wa ? `https://wa.me/${wa[1]}?text=${encodeURIComponent(summaryText(r))}` : base;
+		return wa ? `https://wa.me/${wa[1]}?text=${encodeURIComponent(text)}` : base;
+	}
+
+	function waLink(r) {
+		return waTo(summaryText(r));
 	}
 
 	function toForm(e) {
