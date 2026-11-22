@@ -433,10 +433,10 @@ dd {
 	display: grid;
 	place-items: center;
 	width: 56px;
-	height: 40px;
+	height: 46px; /* same as .btn (Kostenloses Angebot) */
 	padding: 0;
 	border: 0;
-	border-radius: var(--r-12);
+	border-radius: var(--r-pill);
 	background: transparent;
 	cursor: pointer;
 	transition: background var(--dur-ui) var(--ease-out);
@@ -449,7 +449,7 @@ dd {
 
 .lang__menu {
 	position: absolute;
-	top: calc(100% + 17px); /* 13px: 40px toggle centred in the 66px pill, +4px gap below the header */
+	top: calc(100% + 14px); /* 10px: 46px toggle centred in the 66px pill, +4px gap below the header */
 	right: 0;
 	display: grid;
 	gap: 4px;
