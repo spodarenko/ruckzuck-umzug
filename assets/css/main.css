@@ -409,7 +409,7 @@ dd {
 .nav__side {
 	display: flex;
 	align-items: center;
-	gap: 16px;
+	gap: 8px;
 }
 
 .nav__cta {
@@ -449,7 +449,7 @@ dd {
 
 .lang__menu {
 	position: absolute;
-	top: calc(100% + 12px);
+	top: calc(100% + 17px); /* 13px: 40px toggle centred in the 66px pill, +4px gap below the header */
 	right: 0;
 	display: grid;
 	gap: 4px;
