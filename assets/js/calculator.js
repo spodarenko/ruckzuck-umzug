@@ -28,6 +28,7 @@
 		details: $('[data-calc-details]'),
 		fork: $('[data-calc-fork]'),
 		note: $('.calc__note'),
+		variant: document.querySelector('[data-calc-variant]'),
 	};
 	// Design example shown until a service is chosen.
 	const example = {
@@ -72,6 +73,7 @@
 		unpack: 0,
 		tuning: false,
 		halteverbot: false,
+		variant: 'current', // review tab: current (± spread) | client (minimum at the rates)
 	};
 
 	let s = { ...defaults };
@@ -191,9 +193,13 @@
 			total -= off;
 		}
 		total = round2(total);
-		// Base total at the client's rates = minimum; Richtwert (normal flat) and maximum (very full) on top.
-		const [mid, max] = P.estimate[s.service];
-		return { rows, total, low: round10(total), mid: round10(total * (1 + mid)), high: round10(total * (1 + max)) };
+		if (s.variant === 'client') {
+			// Base total at the client's rates = minimum; Richtwert (normal flat) and maximum (very full) on top.
+			const [mid, max] = P.estimate[s.service];
+			return { rows, total, low: round10(total), mid: round10(total * (1 + mid)), high: round10(total * (1 + max)) };
+		}
+		const spread = P.spread[s.service];
+		return { rows, total, low: round10(total * (1 - spread)), high: round10(total * (1 + spread)) };
 	}
 
 	/* ---------- UI builders ---------- */
@@ -763,8 +769,9 @@
 			return;
 		}
 		el.tag.textContent = T.tag;
-		el.note.hidden = true;
-		el.fork.hidden = false;
+		const client = s.variant === 'client';
+		el.note.hidden = client;
+		el.fork.hidden = !client;
 		el.fork.replaceChildren();
 		const V = T.variant;
 		const line = ([label, hint], value, mod) =>
@@ -774,12 +781,13 @@
 				h('span', {}, h('strong', {}, label), h('small', {}, hint)),
 				h('b', {}, eurRound(value)),
 			);
-		el.fork.append(
-			line(V.min, r.low, ''),
-			line(V.mid, r.mid, 'is-mid'),
-			line(V.max, r.high, ''),
-			h('p', { class: 'calc__fork-note' }, V.note),
-		);
+		if (client)
+			el.fork.append(
+				line(V.min, r.low, ''),
+				line(V.mid, r.mid, 'is-mid'),
+				line(V.max, r.high, ''),
+				h('p', { class: 'calc__fork-note' }, V.note),
+			);
 
 		const price = range(r);
 		if (price !== lastPrice) {
@@ -829,7 +837,15 @@
 				),
 			),
 		);
-		el.breakdown.append(rowsBox, h('div', { class: 'row total' }, h('span', {}, T.variant.min[0]), h('span', {}, eurRound(r.total))));
+		el.breakdown.append(
+			rowsBox,
+			h(
+				'div',
+				{ class: 'row total' },
+				h('span', {}, s.variant === 'client' ? T.variant.min[0] : T.rows.total),
+				h('span', {}, eurRound(r.total)),
+			),
+		);
 	}
 
 	function render() {
@@ -841,6 +857,14 @@
 		el.next.hidden = s.step === STEPS - 1;
 		refresh();
 	}
+
+	el.variant?.addEventListener('click', (e) => {
+		const btn = e.target.closest('[data-variant]');
+		if (!btn) return;
+		el.variant.querySelectorAll('[data-variant]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+		set({ variant: btn.dataset.variant });
+	});
+	el.variant?.querySelectorAll('[data-variant]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.variant === s.variant)));
 
 	el.back.addEventListener('click', () => set({ step: Math.max(0, s.step - 1) }));
 	el.next.addEventListener('click', () => valid() && set({ step: Math.min(STEPS - 1, s.step + 1) }));
