@@ -26,9 +26,7 @@
 		breakdown: $('[data-calc-breakdown]'),
 		tag: $('[data-calc-tag]'),
 		details: $('[data-calc-details]'),
-		fork: $('[data-calc-fork]'),
 		note: $('.calc__note'),
-		variant: document.querySelector('[data-calc-variant]'),
 	};
 	// Design example shown until a service is chosen.
 	const example = {
@@ -65,15 +63,14 @@
 		date: '',
 		flexible: false,
 		montage: 0,
-		loadH: 1, // Transporter mit Fahrer: hours given by the customer
-		unloadH: 1,
+		loadH: 0, // Transporter mit Fahrer: optional hours, added by the customer
+		unloadH: 0,
 		waitH: 0,
 		kartons: 0,
 		pack: 0,
 		unpack: 0,
 		tuning: false,
 		halteverbot: false,
-		variant: 'current', // review tab: current (± spread) | client (minimum at the rates)
 	};
 
 	let s = { ...defaults };
@@ -146,8 +143,8 @@
 		if (isTransporter()) {
 			// Own tariff: hours given by the customer + km, no drive time, no Anfahrt.
 			const t = P.transporter;
-			// Tab "drive": route drive time is billed at the hourly rate too.
-			if (s.variant === 'drive' && s.km) row(L.rows.transit, driveHours(), 'h', t.perHour);
+			// Route drive time is billed at the hourly rate (client, Nov 2026).
+			if (s.km) row(L.rows.transit, driveHours(), 'h', t.perHour);
 			if (s.loadH) row(L.rows.load, s.loadH, 'h', t.perHour);
 			if (s.unloadH) row(L.rows.unload, s.unloadH, 'h', t.perHour);
 			if (s.waitH) row(L.rows.wait, s.waitH, 'h', t.perHour);
@@ -195,11 +192,6 @@
 			total -= off;
 		}
 		total = round2(total);
-		if (s.variant === 'client') {
-			// Base total at the client's rates = minimum; Richtwert (normal flat) and maximum (very full) on top.
-			const [mid, max] = P.estimate[s.service];
-			return { rows, total, low: round10(total), mid: round10(total * (1 + mid)), high: round10(total * (1 + max)) };
-		}
 		const spread = P.spread[s.service];
 		return { rows, total, low: round10(total * (1 - spread)), high: round10(total * (1 + spread)) };
 	}
@@ -771,26 +763,6 @@
 			return;
 		}
 		el.tag.textContent = T.tag;
-		const client = s.variant === 'client';
-		el.note.hidden = client;
-		el.fork.hidden = !client;
-		el.fork.replaceChildren();
-		const V = T.variant;
-		const line = ([label, hint], value, mod) =>
-			h(
-				'div',
-				{ class: `calc__fork-row ${mod}` },
-				h('span', {}, h('strong', {}, label), h('small', {}, hint)),
-				h('b', {}, eurRound(value)),
-			);
-		if (client)
-			el.fork.append(
-				line(V.min, r.low, ''),
-				line(V.mid, r.mid, 'is-mid'),
-				line(V.max, r.high, ''),
-				h('p', { class: 'calc__fork-note' }, V.note),
-			);
-
 		const price = range(r);
 		if (price !== lastPrice) {
 			el.price.textContent = price;
@@ -839,15 +811,7 @@
 				),
 			),
 		);
-		el.breakdown.append(
-			rowsBox,
-			h(
-				'div',
-				{ class: 'row total' },
-				h('span', {}, s.variant === 'client' ? T.variant.min[0] : T.rows.total),
-				h('span', {}, eurRound(r.total)),
-			),
-		);
+		el.breakdown.append(rowsBox, h('div', { class: 'row total' }, h('span', {}, T.rows.total), h('span', {}, eurRound(r.total))));
 	}
 
 	function render() {
@@ -859,17 +823,6 @@
 		el.next.hidden = s.step === STEPS - 1;
 		refresh();
 	}
-
-	el.variant?.addEventListener('click', (e) => {
-		const btn = e.target.closest('[data-variant]');
-		if (!btn) return;
-		el.variant.querySelectorAll('[data-variant]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
-		const v = btn.dataset.variant;
-		// "drive" tab: load/unload are optional, the customer adds them if needed.
-		const hours = v === 'drive' ? 0 : 1;
-		set({ variant: v, loadH: hours, unloadH: hours });
-	});
-	el.variant?.querySelectorAll('[data-variant]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.variant === s.variant)));
 
 	el.back.addEventListener('click', () => set({ step: Math.max(0, s.step - 1) }));
 	el.next.addEventListener('click', () => valid() && set({ step: Math.min(STEPS - 1, s.step + 1) }));
