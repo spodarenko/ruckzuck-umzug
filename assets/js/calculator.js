@@ -142,11 +142,14 @@
 			row(fmt(L.rows.helpers, people - 1), h * (people - 1), 'h', P.helperPerHour);
 		};
 
+		const driveHours = () => Math.max(0.25, Math.round((s.driveMin ? s.driveMin / 60 : s.km / P.avgSpeedKmh) * 4) / 4);
 		if (isTransporter()) {
 			// Own tariff: hours given by the customer + km, no drive time, no Anfahrt.
 			const t = P.transporter;
-			row(L.rows.load, s.loadH, 'h', t.perHour);
-			row(L.rows.unload, s.unloadH, 'h', t.perHour);
+			// Tab "drive": route drive time is billed at the hourly rate too.
+			if (s.variant === 'drive' && s.km) row(L.rows.transit, driveHours(), 'h', t.perHour);
+			if (s.loadH) row(L.rows.load, s.loadH, 'h', t.perHour);
+			if (s.unloadH) row(L.rows.unload, s.unloadH, 'h', t.perHour);
 			if (s.waitH) row(L.rows.wait, s.waitH, 'h', t.perHour);
 			if (s.km) row(fmt(L.rows.vehicle, window.RZ_CALC.maxVehicle), s.km, 'km', t.perKm);
 		} else if (s.service === 'umzug') {
@@ -168,8 +171,7 @@
 		}
 
 		if (s.km && !isTransporter()) {
-			const driveH = Math.max(0.25, Math.round((s.driveMin ? s.driveMin / 60 : s.km / P.avgSpeedKmh) * 4) / 4);
-			row(fmt(L.rows.drive, crew - 1), driveH, 'h', P.driverPerHour + (crew - 1) * P.helperPerHour);
+			row(fmt(L.rows.drive, crew - 1), driveHours(), 'h', P.driverPerHour + (crew - 1) * P.helperPerHour);
 			// Entrümpelung: the only route is base > address, so it is the Anfahrt.
 			if (!oneAddress()) row(fmt(L.rows.vehicle, window.RZ_CALC.maxVehicle), s.km, 'km', P.perKm);
 		}
@@ -862,7 +864,10 @@
 		const btn = e.target.closest('[data-variant]');
 		if (!btn) return;
 		el.variant.querySelectorAll('[data-variant]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
-		set({ variant: btn.dataset.variant });
+		const v = btn.dataset.variant;
+		// "drive" tab: load/unload are optional, the customer adds them if needed.
+		const hours = v === 'drive' ? 0 : 1;
+		set({ variant: v, loadH: hours, unloadH: hours });
 	});
 	el.variant?.querySelectorAll('[data-variant]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.variant === s.variant)));
 
